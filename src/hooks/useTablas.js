@@ -1,13 +1,13 @@
 import { useEffect , useState } from 'react';
-import tablasDB from '../apis/leerTablaApi';
+import { conexionBD } from '../apis/conexionBD';
 
 export const useTablas = (idUsuario) => {
     const [isLoading, setIsLoading]= useState( true );
     const [tablasState, setTablasState]=useState({});
     const getTablas = async () =>{
-        const familiasPromise = tablasDB.post('/familias', {idUsuario} );//la promesa
-        const añosPromise= tablasDB.post('/annos', {idUsuario});
-        const claseMovimientosPromise= tablasDB.post('/clasemovimientos', {idUsuario});
+        const familiasPromise = conexionBD.post('/movimiento/familias', {idUsuario} );//la promesa
+        const añosPromise= conexionBD.post('/movimiento/annos', {idUsuario});
+        const claseMovimientosPromise= conexionBD.post('/movimiento/clasemovimientos', {idUsuario});
         const resps= await Promise.all ( [familiasPromise, añosPromise, claseMovimientosPromise]);//pueden ir varias promesas en paralelo
         const familias =resps[0].data.data.recordset;
         const casitas=familias.map( item =>  {

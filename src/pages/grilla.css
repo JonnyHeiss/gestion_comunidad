@@ -1,0 +1,23 @@
+/* table */
+.ant-table {
+    font-size: 12px;
+  }
+  /* row data */
+  .ant-table-tbody > tr > td {
+    height: 10px;
+    padding: 4px;
+    text-align: left;    
+  }
+  /* row tags */
+  .my-tag {
+    font-size: 8px;
+  }
+  .ant-table-thead > tr > th {
+    height: 10px;
+    padding: 4px;
+    font-weight: bold;
+    border-color: #000;
+  }
+  .ant-table-tbody > tr:hover > td {
+    color: #000;
+}

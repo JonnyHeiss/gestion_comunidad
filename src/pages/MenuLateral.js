@@ -7,7 +7,7 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 import { Ingreso } from './Ingreso';
 import { Egreso } from './Egreso';
 import { InformeMensual } from './InformeMensual';
-import { InformeIndividual } from './InformeIndividual';
+import { MovimientosEntreFechas } from './MovimientosEntreFechas';
 import { Home } from './Home';
 
 const getItem=(label, key, icon, ruta) => {
@@ -18,7 +18,7 @@ let menuItems = [
   getItem('Registrar ingreso', 'menu1', <LoginOutlined/>,'/ingreso'),
   getItem('Registrar gasto', 'menu2', <LogoutOutlined/>,'/egreso'),
   getItem('Informe mensual', 'menu3', <AuditOutlined />, '/informemes'),
-  getItem('Informe individual', 'menu4', <ExceptionOutlined />, '/informeind'),
+  getItem('Informe de Movimientos', 'menu4', <ExceptionOutlined />, '/informeentrefechas'),
 ];
 export const MenuLateral = () => {
   const [current, setCurrent] = useState ();
@@ -66,7 +66,7 @@ export const MenuLateral = () => {
                 <Route path="/ingreso" element={<Ingreso/>} key={'1'}></Route>
                 <Route path="/egreso" element={<Egreso/>} key={'2'}></Route>
                 <Route path="/informemes" element={<InformeMensual/>} key={'3'}></Route>
-                <Route path="/informeind" element={<InformeIndividual/>} key={'4'}></Route>
+                <Route path="/informeentrefechas" element={<MovimientosEntreFechas/>} key={'4'}></Route>
                 <Route path="/" element={<Home/>} key={'0'}></Route> 
               </Routes>
               </Layout.Content>
