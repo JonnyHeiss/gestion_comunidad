@@ -1,12 +1,14 @@
 import React from "react";
 import {Avatar, Button, Layout} from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-export const Encabezado = ( {handleLogout}) => {
- 
+export const Encabezado = ( {handleLogout , nombreComunidad}) => {
   return (
     <Layout.Header> 
-        <div style={{float:'right',color:'white'}}>
-          <p>Comunidad Vicente Pérez Rosales 1871......................   
+        <div style={{float:'left',color:'white'}}>
+          <p>{ nombreComunidad } </p>
+        </div>
+          <div style={{float:'right',color:'white'}}>
+            <p> 
             <Avatar style={{ backgroundColor: '#87d068', }} icon={<UserOutlined />} />              
             <span> Sistema de gestión de Gastos Comunes   </span>        
             <span style={{paddingLeft :'10px'}}>

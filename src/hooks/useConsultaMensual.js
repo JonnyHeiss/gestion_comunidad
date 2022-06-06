@@ -13,9 +13,8 @@ export const useConsultaMensual = (initialParam, initialData) => {
             setIsError( false );
             setIsLoading( true );
             if ( param.method === 'POST' ){
-                const resp= await conexionBD.post(param.endpoint, param.param);
-                const {recordset}=resp.data.data;
-                //console.log("🚀 ~ file: useConsultaMensual.js ~ line 19 ~ leeData ~ recordsets", recordset)
+                const resp= await conexionBD.post(param.endpoint, param.param );
+                const { recordset }=resp.data.data;
                 setData( recordset );
                 setIsLoading( false );
             }         

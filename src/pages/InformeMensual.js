@@ -80,9 +80,11 @@ export const InformeMensual = () => {
             }
              return 0;
          });
-         setDataExcel( dataExcel );
+        //  console.log('dataExcel',dataExcel);
+        //  console.log('columnsExcel',columnsExcel);
+         setDataExcel( dataExcel );//carga datos grilla Excel
      }
-  }, [exportToExcel]);
+  }, [ exportToExcel ]);
   const onFinishFailed = () =>{ };
   const onSelect=() =>{  };
   if ( isLoading || isLoad  ){
