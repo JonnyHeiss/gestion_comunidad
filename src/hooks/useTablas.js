@@ -8,8 +8,9 @@ export const useTablas = (idUsuario) => {
         const familiasPromise = conexionBD.post('/movimiento/familias', {idUsuario} );//la promesa
         const añosPromise= conexionBD.post('/movimiento/annos', {idUsuario});
         const claseMovimientosPromise= conexionBD.post('/movimiento/clasemovimientos', {idUsuario});
-        const resps= await Promise.all ( [familiasPromise, añosPromise, claseMovimientosPromise]);//pueden ir varias promesas en paralelo
-        const familias =resps[0].data.data.recordset;
+        const organizacionPromise= conexionBD.post('/movimiento/leeorganizacion', {idUsuario});
+        const resps= await Promise.all ( [familiasPromise, añosPromise, claseMovimientosPromise, organizacionPromise ]);//pueden ir varias promesas en paralelo
+        const familias =resps[0].data.data.recordset;        
         const casitas=familias.map( item =>  {
              if (item.idFamilia > 0){
                    return ({atributo:item.idFamilia, valor: item.CodigoCasa+' '+ item.Familia})
@@ -23,7 +24,10 @@ export const useTablas = (idUsuario) => {
             familias: casas, //resps[0].data.data.recordset,
             años : resps[1].data.data.recordset,
             claseMovimientos:resps[2].data.data.recordset,
-        })        
+            organizacion: resps[3].data.data.recordset,
+        });
+        
+              
         setIsLoading( false );
     }
     useEffect(() => {

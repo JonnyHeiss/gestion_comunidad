@@ -23,9 +23,13 @@ export const MovimientosEntreFechas = () => {
   const [exportToExcel, setExportToExcel] =useState( false);
   const [dataExcel,setDataExcel]=useState();
   const [toExcel,setToExcel]=useState( {fileNameExcel: '', sheetNameExcel: ''} ); 
+  moment.locale('es') ;
+  const dateFormat = 'DD/MM/YYYY';
+  
+  //console.log("🚀 ~ file: MovimientosEntreFechas.js ~ line 29 ~ MovimientosEntreFechas ~ moment().format('L')", moment( moment().format('L'),dateFormat) )
   const { fechafin, fechaini, fondo, onChange } =useForm ({ 
      fechaini:moment(moment().format('YYYY')+'0101').format('L'), 
-     fechafin:moment().format('L'), 
+     fechafin: moment( moment().format('L'),dateFormat),
      fondo: 'NORMAL'  });
   const [{ data: dataConsulta, isLoading: isLoad } , setParamConsulta ]= useConsultaMensual( {
       method: 'POST', endpoint: '', params: {}, }, [] );
@@ -36,7 +40,8 @@ export const MovimientosEntreFechas = () => {
   useEffect(() => {
     if ( paramsForm.idUsuario && paramsForm.fechaini &&  paramsForm.fechafin  && paramsForm.fondo ) {
       const leeDatos = async ( idUsuario, fechaInicio, fechaFin, tipoFondo ) =>{
-          await setParamConsulta( {param: { idUsuario, fechaInicio, fechaFin, tipoFondo },
+          moment.locale('es') ;
+          await setParamConsulta( {param: { idUsuario, fechaInicio:moment(fechaInicio).format('YYYYMMDD') , fechaFin:moment(fechaFin).format('YYYYMMDD')  , tipoFondo },
                method: 'POST', endpoint: '/consulta/transentrefechas'
            });
       }
@@ -106,10 +111,10 @@ export const MovimientosEntreFechas = () => {
                      locale = { es_ES }
                      style = {{ marginBottom: '0%', marginTop: '0%',marginLeft: '3%',flexDirection:'column' }}
                      placeholder = 'Fecha inicio'
-                     format= 'DD/MM/YYYY'
+                    // format= 'DD-MM-YYYY'
                      picker= 'date'
                      onChange={  (  value ) => onChange( value, 'fechaini' )}
-                     defaultValue={ moment(fechaini , 'DD/MM/YYYY' ) } 
+                     defaultValue={ moment(fechaini , dateFormat  ) } 
                   />
                 </Form.Item>     
               </Col>    
@@ -121,10 +126,10 @@ export const MovimientosEntreFechas = () => {
                      locale = { es_ES }
                      style = {{ marginBottom: '0%', marginTop: '0%',marginLeft: '3%',flexDirection:'column' }}
                      placeholder = 'Fecha término'
-                     format= 'DD/MM/YYYY'
+                     //format= 'DD-MM-YYYY'
                      picker= 'date'
                      onChange={  (  value ) => onChange( value, 'fechafin' )}
-                     defaultValue= { moment(fechafin , 'DD/MM/YYYY' ) }
+                     defaultValue= { moment(fechafin , dateFormat ) }
                   />
                 </Form.Item>     
               </Col>    

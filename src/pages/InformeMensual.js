@@ -37,8 +37,9 @@ export const InformeMensual = () => {
           await setParamConsulta( {param: { idUsuario, ingresoGasto, claseMovimientos: tipoFondo , año },
                method: 'POST', endpoint: '/consulta/ingygastosxanno'
            });
-      }
+      }      
       leeDatos(paramsForm.idUsuario, paramsForm.año, paramsForm.tipoFondo);   
+      setExportToExcel( false );
      };
   }, [paramsForm]);
    useEffect(() => {
@@ -65,21 +66,21 @@ export const InformeMensual = () => {
           let datoSol=[];//datos de cada fila
           const dataCol = dataIndex; //tiene los nombres de los field de la BD
             dataConsulta.map((x,j) => {//convierte dataLoad en dataSet
-             datoSol=[];
-             dataCol.map((col) =>{ 
+            datoSol=[];
+            dataCol.map((col) =>{ 
                  const result=Object.entries(x);//convierte Objeto en array con 2 elementos: atributo y el valor
                  const linea = result.find( itm => itm[0] === col );
                  if (linea !== undefined)  {
                    datoSol=[...datoSol, linea[1]];
                  }
                  return 0;
-             });
-             if (datoSol.length>0) {              
+            });
+            if (datoSol.length>0) {              
                dataExcel=[ ...dataExcel, datoSol];              
-             }
+            }
              return 0;
          });
-        setDataExcel( dataExcel );
+         setDataExcel( dataExcel );
      }
   }, [exportToExcel]);
   const onFinishFailed = () =>{ };
@@ -134,7 +135,7 @@ export const InformeMensual = () => {
                 <Col span={4} offset={1}> <Button type='primary' htmlType="submit"> Consultar  </Button>  </Col>  
                   {( exportToExcel ) && 
                      <Col span={4} offset={1}> 
-                        <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel } />  
+                        <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel }  />  
                      </Col> 
                   }
               </Row>
