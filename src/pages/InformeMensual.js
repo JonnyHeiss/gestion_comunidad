@@ -17,6 +17,7 @@ export const InformeMensual = () => {
   const { tablas , isLoading } = useTablas(idUsuario); //las tablas de los select
   const [paramsForm , setParamsForm] = useState({});//la data del form y sus campos
   const ingGastoRef=useRef('GASTO');
+  const [ nombreInforme, setNombreInforme ] = useState('');
   const [columnsExcel, setColumnsExcel]=useState([]);//nombre de las columnas del excel
   const [dataIndex, setDataIndex]=useState([]);//para armar arreglo filas del excel
   const [exportToExcel, setExportToExcel] =useState( false);//para indicar cuando mandar a excel
@@ -86,7 +87,12 @@ export const InformeMensual = () => {
      }
   }, [ exportToExcel ]);
   const onFinishFailed = () =>{ };
-  const onSelect=() =>{  };
+  const onSelect=( value ) =>{  };
+  const onSelectTipoFondo= ( value ) =>{
+      const sel=optionInforme.filter( data => data.atributo === value );
+      if ( sel )   setNombreInforme( sel[0].valor );
+      setExportToExcel( false );
+  };
   if ( isLoading || isLoad  ){
     return (<Layout style={{ minHeight: "100vh",padding: '5px 10px 10px' }}  >
               <div  style={{ position: "absolute",left: "55%", top: "50%", }}  >
@@ -106,7 +112,7 @@ export const InformeMensual = () => {
         >
         <div style={{textAlign:'left'}}>{renderHTML('<h4>Informe mensual</h4>') }  </div>
         <Row >
-              <Col span={6} offset={1} >   
+              <Col span={4} offset={1} >   
                 <Form.Item  name='año'  
                   rules={[ { required: true,  message: '¡Debe seleccionar el año!', },]}            
                 >
@@ -127,17 +133,18 @@ export const InformeMensual = () => {
                   <Form.Item  name='tipoFondo'  
                     rules={[{ required: true, message: '¡Debe seleccionar el tipo de Fondo!', }, ]}            
                   >
-                      <Select placeholder='Seleccione tipo Fondo' align={'left'} 
+                      <Select placeholder='Seleccione tipo Fondo' align={'left'} onChange={onSelectTipoFondo}
+                      // onSelect={ (value, index) => onSelectTipoFondo( value, index)}
                           style={{ marginBottom: '0%', marginTop: '0%',marginLeft: '0%', width: '220px'}}
                       >
                         { optionInforme.map( ( opc ) => <Select.Option key = { opc.atributo }> { opc.valor}</Select.Option> ) }
                       </Select>
                   </Form.Item>         
                 </Col> 
-                <Col span={4} offset={1}> <Button type='primary' htmlType="submit"> Consultar  </Button>  </Col>  
+                <Col span={4} > <Button type='primary' htmlType="submit"> Consultar  </Button>  </Col>  
                   {( exportToExcel ) && 
-                     <Col span={4} offset={1}> 
-                        <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel }  />  
+                     <Col span={5} > 
+                        <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel } label={`Bajar a Excel: ${nombreInforme}`} />  
                      </Col> 
                   }
               </Row>

@@ -6,7 +6,7 @@ import {  Button } from "antd";
 const ExcelFile = ReactExport.ExcelFile;//es el archivo a crear
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;//esta es la hoja
 
-export const ExportExcel= ({ columnsExcel, dataExcel, toExcel } ) =>{//componente que exporta a excel vía botón
+export const ExportExcel= ({ columnsExcel, dataExcel, toExcel, label } ) =>{//componente que exporta a excel vía botón
     const hoy= new Date();
     const local = hoy.toLocaleDateString("es-CL");
     //const offset = hoy.getTimezoneOffset() ; 
@@ -16,7 +16,13 @@ export const ExportExcel= ({ columnsExcel, dataExcel, toExcel } ) =>{//component
     return(
       <div>
         <ExcelFile 
-            element={<Button icon={ <FileExcelOutlined />} type="secondary"  >Bajar a Excel </Button> } 
+            element={<Button icon={ <FileExcelOutlined />} type="secondary"  > 
+             {
+             (label.length > 0 ) 
+             ? ( `${label}` )
+             : 'Bajar a Excel'
+             }
+            </Button> } 
             filename={toExcel.fileNameExcel +` ${today}`} 
             >
             <ExcelSheet dataSet={ multiData } name={toExcel.sheetNameExcel} />

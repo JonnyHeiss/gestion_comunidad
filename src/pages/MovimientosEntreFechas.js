@@ -2,6 +2,7 @@ import React, { useEffect , useState  } from "react";
 import { Layout , Form, Row, Col, Select, Spin, Button, Table, Empty, DatePicker } from "antd";
 import renderHTML from 'react-render-html';
 import * as moment from "moment";
+import Swal from "sweetalert2";
 import "moment/locale/es";
 import es_ES from "antd/lib/date-picker/locale/es_ES";
 
@@ -17,31 +18,50 @@ const idUsuario =1;
 const backgroundColor='#FAEBD7';
 
 export const MovimientosEntreFechas = () => {
-  const [paramsForm , setParamsForm] = useState({});
+  const dateFormat = 'YYYY-MM-DD';
+  moment.locale('es') ;
+  const [paramsForm , setParamsForm] = useState({ idUsuario, fechaini:moment(moment().format('YYYY')+'0101').format(dateFormat)
+                         , fechafin:  moment( moment().format(dateFormat)), fondo: '' });
   const [columnsExcel, setColumnsExcel]=useState([]);
   const [dataIndex, setDataIndex]=useState([]);//para armar arreglo filas del excel
   const [exportToExcel, setExportToExcel] =useState( false);
   const [dataExcel,setDataExcel]=useState();
   const [toExcel,setToExcel]=useState( {fileNameExcel: '', sheetNameExcel: ''} ); 
-  moment.locale('es') ;
-  const dateFormat = 'DD/MM/YYYY';
+  const [ nombreInforme, setNombreInforme ] = useState('');
   
-  //console.log("🚀 ~ file: MovimientosEntreFechas.js ~ line 29 ~ MovimientosEntreFechas ~ moment().format('L')", moment( moment().format('L'),dateFormat) )
-  const { fechafin, fechaini, fondo, onChange } =useForm ({ 
-     fechaini:moment(moment().format('YYYY')+'0101').format('L'), 
-     fechafin: moment( moment().format('L'),dateFormat),
-     fondo: 'NORMAL'  });
+  const { fechafin, fechaini, fondo, onChange , setFormValue } =useForm ( paramsForm
+    // {  fechaini:moment(moment().format('YYYY')+'0101').format('L'),  fechafin: moment( moment().format('L'),dateFormat), fondo: 'NORMAL'   }
+    );
   const [{ data: dataConsulta, isLoading: isLoad } , setParamConsulta ]= useConsultaMensual( {
       method: 'POST', endpoint: '', params: {}, }, [] );
   const onFinish=() =>{
-    //falta validar las fechas
+      if ( !fechaini ){
+        Swal.fire(
+          'Error',
+          'Debe definir la fecha de inicio',
+          'error'
+        );
+         return;
+      };
+      if ( !fechafin ){
+        Swal.fire(
+          'Error',
+          'Debe definir la fecha de término',
+          'error'
+        );
+         return;
+      }
       setParamsForm( { idUsuario, fechaini, fechafin , fondo })
   };
+  useEffect(() => {
+    setFormValue( paramsForm )
+  }, [ ]);  
   useEffect(() => {
     if ( paramsForm.idUsuario && paramsForm.fechaini &&  paramsForm.fechafin  && paramsForm.fondo ) {
       const leeDatos = async ( idUsuario, fechaInicio, fechaFin, tipoFondo ) =>{
           moment.locale('es') ;
-          await setParamConsulta( {param: { idUsuario, fechaInicio:moment(fechaInicio).format('YYYYMMDD') , fechaFin:moment(fechaFin).format('YYYYMMDD')  , tipoFondo },
+          await setParamConsulta( {param: { idUsuario, fechaInicio:moment(fechaInicio).format('YYYYMMDD') , 
+                                                      fechaFin:moment(fechaFin).format('YYYYMMDD')  , tipoFondo },
                method: 'POST', endpoint: '/consulta/transentrefechas'
            });
       }
@@ -49,13 +69,11 @@ export const MovimientosEntreFechas = () => {
      };
   }, [paramsForm]);
    useEffect(() => {
-     if ( dataConsulta.length >0 ) {
-       
+     if ( dataConsulta.length >0 ) {       
         const col= columnMov.map( ( c ) => c.title);
         setColumnsExcel( col );
         const ind= columnMov.map( ( c ) => c.dataIndex );
-         setDataIndex(ind);
-      
+         setDataIndex(ind);      
       setToExcel({ fileNameExcel: paramsForm.fondo, sheetNameExcel: 'Hoja 1'} );
       setExportToExcel( true );
      }
@@ -84,6 +102,11 @@ export const MovimientosEntreFechas = () => {
      }
   }, [exportToExcel]);
   const onFinishFailed = () =>{ };
+  const onSelectFondo= ( value ) =>{
+    const sel=optionInformeMov.filter( data => data.atributo === value );
+    if ( sel )   setNombreInforme( sel[0].valor );
+    setExportToExcel( false );
+  };
 
   if ( isLoad  ){
     return (<Layout style={{ minHeight: "100vh",padding: '5px 10px 10px' }}  >
@@ -95,6 +118,7 @@ export const MovimientosEntreFechas = () => {
   };
   return (
     <>
+    {/* {console.log('render',fechaini) } */}
       <Layout.Content style={  { background:`${backgroundColor}`, 
           }}>
         <Form  onFinish={onFinish}
@@ -105,16 +129,16 @@ export const MovimientosEntreFechas = () => {
         <Row >
               <Col span={4}  >   
                 <Form.Item  name='fechaini'  
-                 // rules={[ { required: true,  message: '¡Debe seleccionar el Fecha de inicio', },]}            
+                 //rules={[ { required: true,  message: '¡Debe seleccionar el Fecha de inicio', },]}            
                 >
                   <DatePicker 
                      locale = { es_ES }
                      style = {{ marginBottom: '0%', marginTop: '0%',marginLeft: '3%',flexDirection:'column' }}
                      placeholder = 'Fecha inicio'
-                    // format= 'DD-MM-YYYY'
                      picker= 'date'
                      onChange={  (  value ) => onChange( value, 'fechaini' )}
                      defaultValue={ moment(fechaini , dateFormat  ) } 
+                     value= {  moment(fechaini , dateFormat  ) }
                   />
                 </Form.Item>     
               </Col>    
@@ -126,29 +150,29 @@ export const MovimientosEntreFechas = () => {
                      locale = { es_ES }
                      style = {{ marginBottom: '0%', marginTop: '0%',marginLeft: '3%',flexDirection:'column' }}
                      placeholder = 'Fecha término'
-                     //format= 'DD-MM-YYYY'
                      picker= 'date'
                      onChange={  (  value ) => onChange( value, 'fechafin' )}
                      defaultValue= { moment(fechafin , dateFormat ) }
                   />
                 </Form.Item>     
               </Col>    
-              <Col span={4}  >   
+              <Col span={6}  >   
                   <Form.Item  name='fondo'  
                     rules={[{ required: true, message: '¡Debe seleccionar el Fondo!', }, ]}            
                   >
                       <Select placeholder='Seleccione Fondo' align={'left'} 
                           style={{ marginBottom: '0%', marginTop: '0%',marginLeft: '0%', width: '220px'}}
                           onSelect={ ( value ) => onChange( value , 'fondo' )}
+                          onChange = { onSelectFondo }
                       >
                         { optionInformeMov.map( ( opc ) => <Select.Option key = { opc.atributo }> { opc.valor}</Select.Option> ) }
                       </Select>
                   </Form.Item>         
                 </Col> 
-                <Col span={ 4 } > <Button type='primary' htmlType="submit"> Consultar  </Button>  </Col>  
+                <Col span={ 4 }  > <Button type='primary' htmlType="submit"> Consultar  </Button>  </Col>  
                   {( exportToExcel ) && 
                      <Col span={ 4 } > 
-                        <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel } />  
+                        <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel } label={`Bajar a Excel: ${nombreInforme}`} />  
                      </Col> 
                   }
               </Row>
