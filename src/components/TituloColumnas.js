@@ -54,7 +54,16 @@ export const columnGasto = [
         { title: 'Gasto', dataIndex: 'Gasto', key: 'Gasto', align: 'right', render: ((monto) => formatNumber( monto) ) },
         { title: 'Saldo', dataIndex: 'Saldo', key: 'Saldo', align: 'right', render: ((monto) => formatNumber( monto) ) },
        ];
+       export const columnDetIngreso = [
+        { title: 'Fecha ingreso', dataIndex: 'fechaDocumento', key: 'fechaDocumento', },
+        { title: 'Comentario', dataIndex: 'comentario', key: 'comentario', },
+        { title: 'Monto ingreso', dataIndex: 'montoIngreso', key: 'montoIngreso',align: 'right', render: ((monto) => ( monto !=='' )?formatNumber( parseInt( monto)):'' ) },
+        { title: 'Asignado a', dataIndex: 'descripcion', key: 'descripcion', },
+        { title: 'Fecha mov.', dataIndex: 'fechaMovimiento', key: 'fechaMovimiento', },
+        { title: 'Mes cancela', dataIndex: 'mesPago', key: 'mes', },
+        { title: 'Monto', dataIndex: 'monto', key: 'monto', align: 'right', render: ((monto) => formatNumber( monto) ) },
+       ];
    const formatNumber = (value) =>{
-            //return "$" + value.toLocaleString("en");
             return  value.toLocaleString("es-CL");
     };
+  

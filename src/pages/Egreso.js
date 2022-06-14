@@ -1,15 +1,21 @@
 // este es el porgrama de egresos
-import React from "react";
+import React ,{ useContext } from "react";
 import { Button, Col, DatePicker, InputNumber, Layout, Row, Select, Input, Form, Spin } from "antd";
-import  {registrarMovApi} from '../apis/registrarMovApi';
 import * as moment from "moment";
 import "moment/locale/es";
-import es_ES from "antd/lib/date-picker/locale/es_ES";
 import Swal from "sweetalert2";
+import es_ES from "antd/lib/date-picker/locale/es_ES";
+
+import  {registrarMovApi} from '../apis/registrarMovApi';
 import { useTablas } from "../hooks/useTablas";
+import { AuthContext } from "../auth/authContext";
+
 const backgroundColor='#FAEBD7';
 
 export const Egreso = () => {
+  const { user } = useContext( AuthContext );
+
+  const idUsuario=user.idUsuario;
   const [form] = Form.useForm()
   const { tablas , isLoading } = useTablas(1);
   const onSelect=(value) =>{
@@ -33,8 +39,6 @@ export const Egreso = () => {
     const tipoDocumento = 'GASTO';
     const fechaDocumento = moment(form.getFieldsValue().fecha).format('YYYY-MM-DD');
     const tipoGasto = parseInt( form.getFieldsValue().idGasto);
-    console.log("🚀 ~ file: Egreso.js ~ line 35 ~ onFinish ~ tipoGasto", tipoGasto)
-    
     if ( tipoGasto === undefined || tipoGasto === null ){
       Swal.fire(
         'Error',
@@ -53,7 +57,7 @@ export const Egreso = () => {
       return;
     };
     const monto=form.getFieldsValue().monto;
-    const idUsuario = 1;
+    
     const idClaseMovimiento = 0;
     const newPost= {     
        tipoDocumento,     

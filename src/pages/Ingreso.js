@@ -1,15 +1,20 @@
 // este es el programa de ingresos
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Col, DatePicker, InputNumber, Layout, Row, Select ,Form, Spin } from "antd";
 import renderHTML from 'react-render-html';
 import * as moment from "moment";
 import "moment/locale/es";
 import es_ES from "antd/lib/date-picker/locale/es_ES";
-import  {registrarMovApi} from '../apis/registrarMovApi';
 
+import  {registrarMovApi} from '../apis/registrarMovApi';
 import { useTablas } from "../hooks/useTablas";
+//import { UserContext } from "../auth/UserContext";
+import { AuthContext } from "../auth/authContext";
 const backgroundColor='#FAEBD7';
+
 export const Ingreso = () => {
+  const { user } = useContext( AuthContext );
+  const idUsuario=user.idUsuario;
   const [form] = Form.useForm( );
   const { tablas , isLoading } = useTablas(1); 
   const onSelect=(value) =>{
@@ -28,7 +33,7 @@ export const Ingreso = () => {
   const onFinish = async (values) => {
      const tipoDocumento = 'INGRESO';
      const fechaDocumento = moment(form.getFieldsValue().fecha).format('YYYY-MM-DD');
-     const idUsuario = 1;
+     
      const idClaseMovimiento = 0;
      const comentario = '';
      const monto=form.getFieldsValue().monto;

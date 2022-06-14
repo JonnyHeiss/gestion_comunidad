@@ -1,19 +1,26 @@
-import React, { useEffect , useState , useRef } from "react";
+import React, { useEffect , useState , useRef, useContext } from "react";
 import { Layout , Form, Row, Col, Select, Spin, Button, Table, Empty } from "antd";
 import renderHTML from 'react-render-html';
-import { useTablas } from "../hooks/useTablas";
-import { useConsultaMensual } from "../hooks/useConsultaMensual";
 
 import "antd/dist/antd.css";
 import "./grilla.css";
+
+import { useTablas } from "../hooks/useTablas";
+import { useConsultaMensual } from "../hooks/useConsultaMensual";
 import { columnGasto, columnIngreso , optionInforme} from '../components/TituloColumnas';
 import { ExportExcel } from "../components/ExportToExcel";
+//import { UserContext } from "../auth/UserContext";
+import { AuthContext } from "../auth/authContext";
 
-const idUsuario =1;
+
 const backgroundColor='#FAEBD7';
 
 export const InformeMensual = () => {
   const [form] = Form.useForm( );
+  const { user } = useContext( AuthContext );
+
+  const idUsuario=user.idUsuario;
+
   const { tablas , isLoading } = useTablas(idUsuario); //las tablas de los select
   const [paramsForm , setParamsForm] = useState({});//la data del form y sus campos
   const ingGastoRef=useRef('GASTO');

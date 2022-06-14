@@ -5,9 +5,9 @@ moment.locale('es') ;
 const dateFormat = 'YYYY-MM-DD';
 export const useForm = ( formulario ) => {// de lección 27 de RN
   const [state, setState ] =useState( formulario);
-//   useEffect(() => {
-//      console.log("🚀 ~ file: useForm.js ~ line 8 ~ useForm ~ state", state, moment(state.fechafin, dateFormat ))
-//   }, [state])  
+  useEffect(() => {
+     //console.log("🚀 ~ file: useForm.js ~ line 9 ~ useForm ~ state", state)
+  }, [state])  
   const setFormValue = ( formulario ) => {//para poblar el form x ejemplo al hacer un load al BE
     setState( formulario );
   };
@@ -17,7 +17,7 @@ export const useForm = ( formulario ) => {// de lección 27 de RN
         valor='';
     }else {
         if ( value._isAMomentObject ) {//si es fecha el es un object moment
-            valor = moment( value, dateFormat  );// se formatea string según dateFormat
+            valor = moment( value).format( dateFormat  );// se formatea string según dateFormat
         }else{
             valor=value;
         }
