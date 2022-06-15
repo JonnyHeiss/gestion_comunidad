@@ -13,7 +13,8 @@ export const Home = (  ) => {
               Fondo de Emergencia, de acuerdo a montos establecidos para cada casa.</p>
             <p>Con esos valores se pueden generar 2 tipos de informes:</p>
             <li>Informes mensuales de ingresos, gastos y saldos del Fondo Normal y del Fondo de Emergencia.</li>
-            <li>Informes individuales, con los ingresos pagados por una casa específica.</li>
+            <li>Informes de movimientos , con los ingresos, gastos y saldos ordenados en forma cronológica para un rango de fechas específico.
+               En este informe, presionando la lupa, se pueden revisar todos los movimientos de una casa.</li>
           </div>
           <br></br>
       </>
