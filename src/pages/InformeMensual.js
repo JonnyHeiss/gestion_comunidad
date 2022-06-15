@@ -9,7 +9,6 @@ import { useTablas } from "../hooks/useTablas";
 import { useConsultaMensual } from "../hooks/useConsultaMensual";
 import { columnGasto, columnIngreso , optionInforme} from '../components/TituloColumnas';
 import { ExportExcel } from "../components/ExportToExcel";
-//import { UserContext } from "../auth/UserContext";
 import { AuthContext } from "../auth/authContext";
 
 
@@ -30,7 +29,7 @@ export const InformeMensual = () => {
   const [exportToExcel, setExportToExcel] =useState( false);//para indicar cuando mandar a excel
   const [dataExcel,setDataExcel]=useState();//la grilla del excel
   const [toExcel,setToExcel]=useState( {fileNameExcel: '', sheetNameExcel: ''} );  //nombre del excel y de la hoja
-  const [{ data: dataConsulta, isLoading: isLoad } , setParamConsulta ]= useConsultaMensual( {
+  const [{ data: dataConsulta, isLoading: isLoadLoadingGrilla } , setParamConsulta ]= useConsultaMensual( {
       method: 'POST', endpoint: '', params: {}, }, [] );
   const onFinish=() =>{
       const año=parseInt( form.getFieldsValue().año);
@@ -100,67 +99,71 @@ export const InformeMensual = () => {
       if ( sel )   setNombreInforme( sel[0].valor );
       setExportToExcel( false );
   };
-  if ( isLoading || isLoad  ){
-    return (<Layout style={{ minHeight: "100vh",padding: '5px 10px 10px' }}  >
+
+  return (
+    <>
+    {
+      (!isLoading ) ? (
+        <Layout.Content style={  { background:`${backgroundColor}`, 
+            }}>
+              console.log('render',isLoading , isLoad )
+          <Form  onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                form={form}
+          >
+          <div style={{textAlign:'left'}}>{renderHTML('<h4>Informe mensual</h4>') }  </div>
+          <Row >
+                <Col span={4} offset={1} >   
+                  <Form.Item  name='año'  
+                    rules={[ { required: true,  message: '¡Debe seleccionar el año!', },]}            
+                  >
+                      <Select placeholder='Seleccione año' align={'left'} onSelect={onSelect}
+                          style={{ marginBottom: '0%', marginTop: '0%',marginLeft: '0%', width: '180px'}}
+                      >
+                          {
+                            tablas.años.map(year =>{
+                              return <Select.Option key={year.atributo}>
+                                {year.valor}
+                              </Select.Option>
+                            } )
+                          }
+                      </Select>
+                  </Form.Item>     
+                </Col>    
+                <Col span={6} offset={1} >   
+                    <Form.Item  name='tipoFondo'  
+                      rules={[{ required: true, message: '¡Debe seleccionar el tipo de Fondo!', }, ]}            
+                    >
+                        <Select placeholder='Seleccione tipo Fondo' align={'left'} onChange={onSelectTipoFondo}
+                        // onSelect={ (value, index) => onSelectTipoFondo( value, index)}
+                            style={{ marginBottom: '0%', marginTop: '0%',marginLeft: '0%', width: '220px'}}
+                        >
+                          { optionInforme.map( ( opc ) => <Select.Option key = { opc.atributo }> { opc.valor}</Select.Option> ) }
+                        </Select>
+                    </Form.Item>         
+                  </Col> 
+                  <Col span={4} > <Button type='primary' htmlType="submit"> Consultar  </Button>  </Col>  
+                    {( exportToExcel ) && 
+                      <Col span={5} > 
+                          <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel } label={`Bajar a Excel: ${nombreInforme}`} />  
+                      </Col> 
+                    }
+                </Row>
+          </Form>
+          { ( !isLoadLoadingGrilla ) ? <Table style={{display:"flex",flex: 1 , justifyContent: 'center' }} dataSource={ dataConsulta } 
+                  pagination={{ pageSizeOptions: ['10', '20', '50', '100'] }} columns={ (ingGastoRef.current ==='GASTO')? columnGasto: columnIngreso } />
+              : <Empty  />
+          }
+        </Layout.Content>)
+        :(
+        <Layout style={{ minHeight: "100vh",padding: '5px 10px 10px' }}  >
               <div  style={{ position: "absolute",left: "55%", top: "50%", }}  >
                 <Spin size="large"   tip ='Cargando....' >  </Spin>
               </div>
             </Layout>
-          )
-  };
-  return (
-    <>
-      <Layout.Content style={  { background:`${backgroundColor}`, 
-          }}>
-        <Form  onFinish={onFinish}
-               onFinishFailed={onFinishFailed}
-               autoComplete="off"
-               form={form}
-        >
-        <div style={{textAlign:'left'}}>{renderHTML('<h4>Informe mensual</h4>') }  </div>
-        <Row >
-              <Col span={4} offset={1} >   
-                <Form.Item  name='año'  
-                  rules={[ { required: true,  message: '¡Debe seleccionar el año!', },]}            
-                >
-                    <Select placeholder='Seleccione año' align={'left'} onSelect={onSelect}
-                        style={{ marginBottom: '0%', marginTop: '0%',marginLeft: '0%', width: '180px'}}
-                    >
-                        {
-                          tablas.años.map(year =>{
-                            return <Select.Option key={year.atributo}>
-                              {year.valor}
-                            </Select.Option>
-                          } )
-                        }
-                    </Select>
-                </Form.Item>     
-              </Col>    
-              <Col span={6} offset={1} >   
-                  <Form.Item  name='tipoFondo'  
-                    rules={[{ required: true, message: '¡Debe seleccionar el tipo de Fondo!', }, ]}            
-                  >
-                      <Select placeholder='Seleccione tipo Fondo' align={'left'} onChange={onSelectTipoFondo}
-                      // onSelect={ (value, index) => onSelectTipoFondo( value, index)}
-                          style={{ marginBottom: '0%', marginTop: '0%',marginLeft: '0%', width: '220px'}}
-                      >
-                        { optionInforme.map( ( opc ) => <Select.Option key = { opc.atributo }> { opc.valor}</Select.Option> ) }
-                      </Select>
-                  </Form.Item>         
-                </Col> 
-                <Col span={4} > <Button type='primary' htmlType="submit"> Consultar  </Button>  </Col>  
-                  {( exportToExcel ) && 
-                     <Col span={5} > 
-                        <ExportExcel columnsExcel={ columnsExcel } dataExcel={ dataExcel } toExcel= { toExcel } label={`Bajar a Excel: ${nombreInforme}`} />  
-                     </Col> 
-                  }
-              </Row>
-        </Form>
-        { (!isLoad) ? <Table style={{display:"flex",flex: 1 , justifyContent: 'center' }} dataSource={ dataConsulta } 
-                pagination={{ pageSizeOptions: ['10', '20', '50', '100'] }} columns={ (ingGastoRef.current ==='GASTO')? columnGasto: columnIngreso } />
-            : <Empty  />
-        }
-      </Layout.Content>
+            )
+    }
     </>
     )
 }

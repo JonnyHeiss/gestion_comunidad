@@ -40,8 +40,8 @@ export const LoginScreen = () => {
 
     }, [])  
     const handleCallbackResponse= ( response ) => {
-      //console.log('Encode Jwt id token:'+ response.credential );
       const userObject = jwt_decode( response.credential );
+      //console.log('Encode Jwt id token:'+ response.credential, userObject );
       setUserGoogle(userObject);
 
   };    

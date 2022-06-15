@@ -11,7 +11,7 @@ export const useConsultaMensual = (initialParam, initialData) => {
     useEffect(() => {
         const leeData = async () =>{
             setIsError( false );
-            setIsLoading( false );
+            setIsLoading( true );
             if ( param.method === 'POST' ){
                 const resp= await conexionBD.post(param.endpoint, param.param );
                 const { recordset }=resp.data.data;
@@ -20,7 +20,7 @@ export const useConsultaMensual = (initialParam, initialData) => {
             }         
         };
         if ( param.endpoint !== '' ) leeData ();
-      }, [param])
+    }, [param])
   return [{ data, isLoading, isError }, 
       setParam,
       param,
