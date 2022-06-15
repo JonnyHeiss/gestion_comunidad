@@ -48,7 +48,6 @@ export const IngresosxCasa = (  ) => {
      }, [ dataDocumento ] );
     
     const OnClickReturn=() => {
-       console.log('OnClickReturn')
        navigate(-1 );//, {replace: true}
     }
   return (

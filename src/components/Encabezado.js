@@ -9,7 +9,7 @@ import { types } from "../types/types";
 
 export const Encabezado = ( ) => {
   const { user, dispatch } = useContext( AuthContext );
-  
+  //console.log('picture',user.picture)
   //const { setUser }= useContext( UserContext );
   const navigate=useNavigate();
 

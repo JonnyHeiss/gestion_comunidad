@@ -48,11 +48,13 @@ export const columnGasto = [
        { atributo: "EMERGENCIA", valor: "Fondo emergencia" },
     ]
     export const columnMov = [
-        { title: 'Fecha', dataIndex: 'Fecha', key: 'fecha', },
-        { title: 'Descripcion', dataIndex: 'comentario', key: 'comentario', },
-        { title: 'Ingreso', dataIndex: 'Ingreso', key: 'Ingreso', align: 'right', render: ((monto) => formatNumber( monto) ) },
-        { title: 'Gasto', dataIndex: 'Gasto', key: 'Gasto', align: 'right', render: ((monto) => formatNumber( monto) ) },
-        { title: 'Saldo', dataIndex: 'Saldo', key: 'Saldo', align: 'right', render: ((monto) => formatNumber( monto) ) },
+        { title: 'Fecha', dataIndex: 'Fecha', key: 'fecha', visible: true,},
+        { title: 'Descripcion', dataIndex: 'comentario', key: 'comentario', visible: true,},
+        { title: 'Ingreso', dataIndex: 'Ingreso', key: 'Ingreso', align: 'right',visible: true, render: ((monto) => formatNumber( monto) ) },
+        { title: 'Gasto', dataIndex: 'Gasto', key: 'Gasto', align: 'right', visible: true,render: ((monto) => formatNumber( monto) ) },
+        { title: 'Saldo', dataIndex: 'Saldo', key: 'Saldo', align: 'right',visible: true, render: ((monto) => formatNumber( monto) ) },
+        { title: 'FechaInicial', dataIndex: 'fechaInicial', key: 'fechaInicial',visible: false,},
+         { title: 'FechaFinal', dataIndex: 'fechaFinal', key: 'fechaFinal',visible: false,},
        ];
        export const columnDetIngreso = [
         { title: 'Fecha ingreso', dataIndex: 'fechaDocumento', key: 'fechaDocumento', },
@@ -67,3 +69,4 @@ export const columnGasto = [
             return  value.toLocaleString("es-CL");
     };
   
+

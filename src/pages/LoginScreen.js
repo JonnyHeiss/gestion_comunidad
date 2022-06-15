@@ -55,7 +55,7 @@ export const LoginScreen = () => {
     if ( userGoogle ){
       //leer el usuario vía email y clave 
        leeDatos( userGoogle.email, 'googleencode' );
-       //console.log('useEffect lee datos userGoogle', userGoogle);
+      // console.log('useEffect lee datos userGoogle', userGoogle);
        setLoading( false );
     }
   }, [userGoogle])
@@ -78,7 +78,9 @@ export const LoginScreen = () => {
                                     celular: datosUser.Celular,
                                     perfil: datosUser.IdPerfil,
                                     nombreComunidad: datosUser.nombreComunidad,
-                                    isUserRedes: ( userGoogle )? true: false
+                                    isUserRedes: ( userGoogle )? true: false,
+                                    picture: userGoogle.picture
+
                                   }
                         };
             dispatch( action );

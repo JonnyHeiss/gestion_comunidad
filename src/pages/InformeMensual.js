@@ -99,7 +99,6 @@ export const InformeMensual = () => {
       if ( sel )   setNombreInforme( sel[0].valor );
       setExportToExcel( false );
   };
-
   return (
     <>
     {
@@ -136,7 +135,6 @@ export const InformeMensual = () => {
                       rules={[{ required: true, message: '¡Debe seleccionar el tipo de Fondo!', }, ]}            
                     >
                         <Select placeholder='Seleccione tipo Fondo' align={'left'} onChange={onSelectTipoFondo}
-                        // onSelect={ (value, index) => onSelectTipoFondo( value, index)}
                             style={{ marginBottom: '0%', marginTop: '0%',marginLeft: '0%', width: '220px'}}
                         >
                           { optionInforme.map( ( opc ) => <Select.Option key = { opc.atributo }> { opc.valor}</Select.Option> ) }
