@@ -79,8 +79,7 @@ export const LoginScreen = () => {
                                     perfil: datosUser.IdPerfil,
                                     nombreComunidad: datosUser.nombreComunidad,
                                     isUserRedes: ( userGoogle )? true: false,
-                                    picture: userGoogle.picture
-
+                                    //picture: (userGoogle.picture)? userGoogle.picture: null
                                   }
                         };
             dispatch( action );
@@ -99,7 +98,7 @@ export const LoginScreen = () => {
 
      };
      const handleInputChange=( value ) =>{
-         console.log('handleInputChange',value);
+         //console.log('handleInputChange',value);
          onChange( value );
      };
     const onFinishFailed = () =>{ };
