@@ -1,7 +1,8 @@
 import axios  from 'axios';
 
 const api =axios.create({
-   baseURL :'http://200.73.59.58:5001/api'
+   //baseURL :'http://200.73.59.58:5001/api'
+   baseURL :'http://cibeles.ticenter.cl:5001/api'
 });
 export const  registrarMovApi= async (newPost) =>{
     const {tipoDocumento, fechaDocumento, idCasa, monto, idUsuario, idClaseMovimiento, comentario}= newPost;
